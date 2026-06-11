@@ -57,7 +57,7 @@ uv pip install gpiozero>=2.0.1 rpi-lgpio>=0.6
 
 - 功能：將 `GPIO13` 設為按鈕輸入，按下時切換 `GPIO23` 的高/低電位。
 - 行為：每次按鈕觸發後，GPIO23 會在 `HIGH (ON)` 與 `LOW (OFF)` 之間切換。
-- 特性：使用內建上拉電阻 (`pull_up=True`)，按鈕接地時觸發。
+- 特性：採用 active-low 設計，`GPIO13` 在未按下時為高電位，按下時為低電位，搭配內建上拉電阻 (`pull_up=True`)。
 
 ## 硬體接線建議
 
@@ -73,7 +73,7 @@ uv pip install gpiozero>=2.0.1 rpi-lgpio>=0.6
 
 ### `gpio13_button.py`
 
-- `GPIO13` -> 按鈕腳位
+- `GPIO13` -> 按鈕腳位 
 - 另一端按鈕腳位 -> GND
 - `GPIO23` -> LED 正極
 - LED 負極 -> 330Ω 電阻 -> GND

@@ -14,7 +14,7 @@ from gpiozero import Button, DigitalOutputDevice
 def main() -> None:
 	# GPIO13 設為按鈕輸入。
 	# pull_up=True 代表使用內建上拉：
-	# 未按下時為高電位，按下（接地）時視為觸發。
+	# 未按下時為高電位，按下（接地）時為低電位，屬於 active-low 設計。
 	button = Button(13, pull_up=True, bounce_time=0.05)
 
 	# GPIO23 設為一般數位輸出，初始為低電位。
