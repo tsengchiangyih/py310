@@ -19,24 +19,34 @@
 - `gpiozero>=2.0.1`
 - `rpi-lgpio>=0.6`
 
-若使用 `uv` 建立虛擬環境，可依序執行：
+若希望以可重現、專案化的方式管理與安裝相依套件，建議使用 `uv add` / `uv lock` / `uv sync` 的流程：
 
 ```bash
-makedir 資料夾
-cd 資料夾
-uv init --python 版本號
+# 建立專案資料夾（若需要）並進入
+mkdir my_project
+cd my_project
+
+# 初始化專案與指定 Python 版本（範例: 3.10）
+uv init --python 3.10
+
+# 建立虛擬環境（預設為 .venv）並啟動
+uv venv .venv
+source .venv/bin/activate
+
+# 將套件加入專案設定（會更新專案元資料）
+uv add gpiozero rpi-lgpio
+
+# 產生/更新 lock 檔以鎖定相依版本
+uv lock
+
+# 在任何機器（或 CI）使用 lock 檔同步/還原環境
 uv sync
 ```
-```bash
-啟動虛擬環境
-source .venc/bin/activate
-```
 
-
-或直接安裝所需套件：
+快速測試（臨時安裝，不會更新專案設定）可改用：
 
 ```bash
-uv pip install gpiozero>=2.0.1 rpi-lgpio>=0.6
+uv pip install gpiozero rpi-lgpio
 ```
 
 ## 檔案說明
@@ -57,6 +67,7 @@ uv pip install gpiozero>=2.0.1 rpi-lgpio>=0.6
 
 - 功能：將 `GPIO13` 設為按鈕輸入，按下時切換 `GPIO23` 的高/低電位。
 - 行為：每次按鈕觸發後，GPIO23 會在 `HIGH (ON)` 與 `LOW (OFF)` 之間切換。
+- 輸出：`GPIO23` 使用 `LED` 物件 (`gpiozero.LED`) 控制，表示為開/關狀態。
 - 特性：採用 active-low 設計，`GPIO13` 在未按下時為高電位，按下時為低電位，搭配內建上拉電阻 (`pull_up=True`)。
 
 ## 硬體接線建議
@@ -104,7 +115,7 @@ python gpio13_button.py
 
 - `gpiozero` 提供簡潔的 GPIO 物件介面。
 - `Button` 可搭配 `pull_up=True` 使用內部上拉電阻，減少額外硬體。
-- `DigitalOutputDevice` 與 `PWMLED` 分別用於一般數位輸出與 PWM 輸出。
+- `LED` 與 `PWMLED` 分別用於一般數位輸出與 PWM 輸出。
 - 透過 `try/except/finally` 來抓取 `KeyboardInterrupt`，確保停止時釋放 GPIO 資源。
 
 ## 注意事項

@@ -8,7 +8,7 @@
 
 from signal import pause
 
-from gpiozero import Button, DigitalOutputDevice
+from gpiozero import Button, LED
 
 
 def main() -> None:
@@ -17,8 +17,9 @@ def main() -> None:
 	# 未按下時為高電位，按下（接地）時為低電位，屬於 active-low 設計。
 	button = Button(13, pull_up=True, bounce_time=0.05)
 
-	# GPIO23 設為一般數位輸出，初始為低電位。
-	output = DigitalOutputDevice(23, active_high=True, initial_value=False)
+	# GPIO23 設為 LED 輸出，初始為低電位（關閉）。
+	output = LED(23)
+	output.off()
 
 	def toggle_output() -> None:
 		# 每次按下按鈕就反轉目前輸出狀態：
